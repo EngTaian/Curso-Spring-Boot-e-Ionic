@@ -21,6 +21,8 @@ import com.taian.cursospringbootcomionic.repositories.CidadeRepository;
 import com.taian.cursospringbootcomionic.repositories.ClienteRepository;
 import com.taian.cursospringbootcomionic.repositories.EnderecoRepository;
 import com.taian.cursospringbootcomionic.repositories.EstadoRepository;
+import com.taian.cursospringbootcomionic.repositories.PagamentoRepository;
+import com.taian.cursospringbootcomionic.repositories.PedidoRepository;
 import com.taian.cursospringbootcomionic.repositories.ProdutoRepository;
 
 @SpringBootApplication
@@ -43,6 +45,12 @@ public class CursospringbootcomionicApplication implements CommandLineRunner {
 	
 	@Autowired
 	private EnderecoRepository enderecoRepository;
+	
+	@Autowired
+	private PedidoRepository pedidoRepository;
+	
+	@Autowired
+	private PagamentoRepository pagamentoRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CursospringbootcomionicApplication.class, args);
