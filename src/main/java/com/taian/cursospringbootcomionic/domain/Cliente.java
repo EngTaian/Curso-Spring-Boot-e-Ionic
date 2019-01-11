@@ -16,6 +16,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.taian.cursospringbootcomionic.domain.enums.TipoCliente;
 
@@ -32,7 +34,7 @@ public class Cliente implements Serializable {
 	private String cpfCnpj;
 	private Integer tipo;
 	
-	@JsonManagedReference
+	
 	@OneToMany(mappedBy = "cliente")
 	private List<Endereco> enderecos = new ArrayList<>();
 	
@@ -40,7 +42,7 @@ public class Cliente implements Serializable {
 	@CollectionTable(name="TELEFONE")
 	private Set<String> numero = new HashSet<>();
 	
-	
+	@JsonIgnore
 	@OneToMany(mappedBy = "cliente")
 	private List<Pedido> pedido = new ArrayList<>();
 	
@@ -112,6 +114,18 @@ public class Cliente implements Serializable {
 
 	public void setNumero(Set<String> numero) {
 		this.numero = numero;
+	}
+
+	public List<Pedido> getPedido() {
+		return pedido;
+	}
+
+	public void setPedido(List<Pedido> pedido) {
+		this.pedido = pedido;
+	}
+
+	public void setTipo(Integer tipo) {
+		this.tipo = tipo;
 	}
 	
 
