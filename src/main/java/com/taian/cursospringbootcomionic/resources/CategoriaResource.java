@@ -2,6 +2,7 @@ package com.taian.cursospringbootcomionic.resources;
 
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.taian.cursospringbootcomionic.domain.Categoria;
+import com.taian.cursospringbootcomionic.dto.CategoriaDTO;
 import com.taian.cursospringbootcomionic.services.CategoriaService;
 
 @RestController
@@ -23,9 +25,10 @@ public class CategoriaResource {
 	private CategoriaService service;
 
 	@RequestMapping(method = RequestMethod.GET)
-	public List<Categoria> findAll(){
+	public ResponseEntity<List<CategoriaDTO>> findAll(){
 		List<Categoria> obj = service.buscarAll();
-		return obj;
+		List<CategoriaDTO> objDTO = obj.stream().map(list -> new CategoriaDTO(list)).collect(Collectors.toList());
+		return ResponseEntity.ok().body(objDTO);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
