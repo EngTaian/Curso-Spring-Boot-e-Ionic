@@ -1,5 +1,6 @@
 package com.taian.cursospringbootcomionic.services;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +27,11 @@ public class CategoriaService {
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! id: " + id + ", Tipo: " + Categoria.class.getName()));
 		
+	}
+	
+	public Categoria insert(Categoria obj) {
+		obj.setId(null);
+		return repo.save(obj);
 	}
 
 }
