@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.taian.cursospringbootcomionic.domain.Categoria;
+import com.taian.cursospringbootcomionic.domain.Cliente;
 import com.taian.cursospringbootcomionic.dto.CategoriaDTO;
 import com.taian.cursospringbootcomionic.repositories.CategoriaRepository;
 import com.taian.cursospringbootcomionic.services.exception.DataIntegrityException;
@@ -40,7 +41,8 @@ public class CategoriaService {
 	}
 
 	public Categoria update(Categoria obj) {
-		find(obj.getId());
+		Categoria newObj = find(obj.getId());
+		updateData(newObj, obj);
 		return repo.save(obj);
 	}
 
@@ -60,5 +62,10 @@ public class CategoriaService {
 	
 	public Categoria fromDTO(CategoriaDTO objDTO) {
 		return new Categoria(objDTO.getId(), objDTO.getNome());
+	}
+	
+	private void updateData(Categoria newObj, Categoria obj) {
+		newObj.setId(obj.getId());
+		newObj.setNome(obj.getNome());
 	}
 }
