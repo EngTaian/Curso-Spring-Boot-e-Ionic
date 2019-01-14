@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.taian.cursospringbootcomionic.domain.Cliente;
-import com.taian.cursospringbootcomionic.domain.Cliente;
 import com.taian.cursospringbootcomionic.dto.ClienteDTO;
+import com.taian.cursospringbootcomionic.dto.ClienteNewDTO;
 import com.taian.cursospringbootcomionic.services.ClienteService;
 
 @RestController
@@ -40,8 +40,9 @@ public class ClienteResource {
 		return ResponseEntity.ok().body(obj);	
 	}
 	
+	
 	@RequestMapping(method=RequestMethod.POST)
-	public ResponseEntity<Void> insert(@Valid @RequestBody ClienteDTO objDTO){
+	public ResponseEntity<Void> insert(@Valid @RequestBody ClienteNewDTO objDTO){
 		Cliente obj = service.fromDTO(objDTO);
 		obj = service.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
