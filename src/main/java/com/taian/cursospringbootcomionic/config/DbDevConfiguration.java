@@ -11,8 +11,8 @@ import org.springframework.context.annotation.Profile;
 import com.taian.cursospringbootcomionic.services.DbService;
 
 @Configuration
-@Profile("test")
-public class DbTestConfiguration {
+@Profile("dev")
+public class DbDevConfiguration {
 	
 	@Autowired
 	private DbService dbService;
