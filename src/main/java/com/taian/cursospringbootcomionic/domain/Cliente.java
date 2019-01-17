@@ -35,8 +35,7 @@ public class Cliente implements Serializable {
 	
 	@Column(unique=true)
 	private String email;
-
-	private String cpfCnpj;
+	private String cpfCnpj;	
 	private Integer tipo;
 	
 	
@@ -127,11 +126,6 @@ public class Cliente implements Serializable {
 
 	public void setPedido(List<Pedido> pedido) {
 		this.pedido = pedido;
-	}
-
-	public void setTipo(Integer tipo) {
-		this.tipo = tipo;
-	}
-	
+	}	
 
 }

@@ -1,9 +1,11 @@
 package com.taian.cursospringbootcomionic.domain;
 
 import java.io.Serializable;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
-
+import java.util.Locale;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -17,27 +19,25 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class Pedido implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
-	@JsonFormat(pattern="dd/MM/yyyy HH:mm")
+
+	@JsonFormat(pattern = "dd/MM/yyyy HH:mm")
 	private Date instante;
-	
+
 	@OneToMany(mappedBy = "id.pedido", cascade = CascadeType.ALL)
 	private Set<ItemPedido> itens = new HashSet<>();
 
 	@ManyToOne
 	@JoinColumn(name = "endereco_de_entrega_id")
 	private Endereco enderecoDeEntrega;
-	
-	
+
 	@ManyToOne
 	@JoinColumn(name = "cliente_id")
 	private Cliente cliente;
@@ -46,7 +46,7 @@ public class Pedido implements Serializable {
 	private Pagamento pagamento;
 
 	public Pedido() {
-		
+
 	}
 
 	public Pedido(Integer id, Date instante, Endereco enderecoDeEntrega, Cliente cliente) {
@@ -57,16 +57,16 @@ public class Pedido implements Serializable {
 		this.cliente = cliente;
 
 	}
-	
+
 	public double getValorTotal() {
 		double soma = 0;
-		for(ItemPedido p : itens) {
+		for (ItemPedido p : itens) {
 			soma += p.getSubTotal();
 		}
-		
+
 		return soma;
 	}
-	
+
 	public Integer getId() {
 		return id;
 	}
@@ -138,6 +138,31 @@ public class Pedido implements Serializable {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+		NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+		StringBuilder builder = new StringBuilder();
+		builder.append("Número do Pedido: ");
+		builder.append(getId());
+		builder.append("\n");
+		builder.append("Cliente: ");
+		builder.append(getCliente().getNome());
+		builder.append("\nData do Pedido: ");
+		builder.append(sdf.format(getInstante()));
+		builder.append("Itens do Pedido: \n");
+		for(ItemPedido ip: getItens()) {
+			builder.append(ip.toString());
+			builder.append("\n");
+		}
+		builder.append("Valor total do Pedido: ");
+		builder.append(getValorTotal());
+		builder.append("\n");
+		builder.append("Situação do Pedido: ");
+		builder.append(getPagamento().getEstado().getDescricao());
+		return builder.toString();
 	}
 
 }
