@@ -17,7 +17,7 @@ public class DbProdConfiguration {
 	@Autowired
 	private DbService dbService;
 	
-	@Value("{spring.jpa.hibernate.ddl-auto}")
+	@Value("${spring.jpa.hibernate.ddl-auto}")
 	private String db;
 	
 	@Bean

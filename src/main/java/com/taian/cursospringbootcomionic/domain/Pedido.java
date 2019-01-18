@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class Pedido implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
@@ -152,7 +153,11 @@ public class Pedido implements Serializable {
 		builder.append(getCliente().getNome());
 		builder.append("\nData do Pedido: ");
 		builder.append(sdf.format(getInstante()));
-		builder.append("Itens do Pedido: \n");
+		builder.append("\nItens do Pedido: \n");
+		builder.append("Produto: ");
+		builder.append("Quantidade: ");
+		builder.append("SubTotal do item: ");
+		builder.append("\n");
 		for(ItemPedido ip: getItens()) {
 			builder.append(ip.toString());
 			builder.append("\n");

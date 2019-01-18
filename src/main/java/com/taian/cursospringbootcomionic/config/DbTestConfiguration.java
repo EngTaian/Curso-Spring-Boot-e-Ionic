@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import com.taian.cursospringbootcomionic.services.DbService;
+import com.taian.cursospringbootcomionic.services.EmailService;
+import com.taian.cursospringbootcomionic.services.MockEmailService;
 
 @Configuration
 @Profile("test")
@@ -17,7 +19,7 @@ public class DbTestConfiguration {
 	@Autowired
 	private DbService dbService;
 	
-	@Value("{spring.jpa.hibernate.ddl-auto}")
+	@Value("${spring.jpa.hibernate.ddl-auto}")
 	private String db;
 	
 	@Bean
@@ -31,4 +33,9 @@ public class DbTestConfiguration {
 		
 	} 
 	
+	
+	@Bean
+	public EmailService emailService() {
+		return new MockEmailService();
+	}
 }

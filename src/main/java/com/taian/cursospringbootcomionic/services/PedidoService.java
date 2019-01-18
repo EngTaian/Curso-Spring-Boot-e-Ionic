@@ -44,6 +44,9 @@ public class PedidoService {
 	@Autowired
 	private ClienteService clienteService;
 	
+	@Autowired
+	private EmailService emailService;
+	
 	public List<Pedido> findAll() {
 		List<Pedido> obj = repo.findAll();
 		return obj;
@@ -65,16 +68,17 @@ public class PedidoService {
 			PagamentoComBoleto pagto = (PagamentoComBoleto) obj.getPagamento();
 			boletoService.preencherPagamentoComBoleto(pagto, obj.getInstante());
 		}
-		obj = repo.save(obj);
-		pagamentoRepository.save(obj.getPagamento());
+		
 		for(ItemPedido ip : obj.getItens()) {
 			ip.setDesconto(0.0);
 			ip.setProduto(produtoService.findById(ip.getProduto().getId()));
 			ip.setPreco(produtoService.findById(ip.getProduto().getId()).getPreco());
 			ip.setPedido(obj);   
 		}
+		obj = repo.save(obj);
+		pagamentoRepository.save(obj.getPagamento());
 		itemPedidoRepository.saveAll(obj.getItens());
-		System.out.println(obj);
+		emailService.sendOrderConfirmationEmail(obj);
 		return obj;
 	}
 }
