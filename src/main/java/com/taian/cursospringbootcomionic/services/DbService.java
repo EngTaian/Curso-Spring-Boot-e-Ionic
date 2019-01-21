@@ -20,6 +20,7 @@ import com.taian.cursospringbootcomionic.domain.PagamentoComCartao;
 import com.taian.cursospringbootcomionic.domain.Pedido;
 import com.taian.cursospringbootcomionic.domain.Produto;
 import com.taian.cursospringbootcomionic.domain.enums.EstadoPagamento;
+import com.taian.cursospringbootcomionic.domain.enums.Perfil;
 import com.taian.cursospringbootcomionic.domain.enums.TipoCliente;
 import com.taian.cursospringbootcomionic.repositories.CategoriaRepository;
 import com.taian.cursospringbootcomionic.repositories.CidadeRepository;
@@ -124,13 +125,19 @@ public class DbService {
 		
 		Cliente cli1 = new Cliente(null, "Maria Silva", "taiandsilva@gmail.com", "36378912377", TipoCliente.PESSOAFISICA, bCryptPasswordEncoder.encode("Teste123"));
 		cli1.getNumero().addAll(Arrays.asList("1122334455","116677889900"));
+		cli1.addPerfil(Perfil.USUARIO);
+		
+		Cliente cli2 = new Cliente(null, "João da Silva", "taian.silva@gmail.com", "36378912377", TipoCliente.PESSOAFISICA, bCryptPasswordEncoder.encode("Teste123"));
+		cli2.getNumero().addAll(Arrays.asList("1122334455","116677889900"));
+		cli2.addPerfil(Perfil.ADMIN);
 		
 		Endereco e1 = new Endereco(null, "Rua Flores", "300", "Apt 303", "Jardim", "38220834", c1, cli1);
 		Endereco e2 = new Endereco(null, "Avenida Matos", "106", "Sala 800", "Centro", "38777012", c2, cli1);
 		
 		cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
+		cli2.getEnderecos().addAll(Arrays.asList(e1));
 		
-		clienteRepository.saveAll(Arrays.asList(cli1));
+		clienteRepository.saveAll(Arrays.asList(cli1, cli2));
 		enderecoRepository.saveAll(Arrays.asList(e1, e2));
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");

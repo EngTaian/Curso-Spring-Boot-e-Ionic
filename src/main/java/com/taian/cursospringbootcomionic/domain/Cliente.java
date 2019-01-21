@@ -5,12 +5,14 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,6 +23,7 @@ import javax.persistence.OneToMany;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.taian.cursospringbootcomionic.domain.enums.Perfil;
 import com.taian.cursospringbootcomionic.domain.enums.TipoCliente;
 
 @Entity
@@ -41,6 +44,9 @@ public class Cliente implements Serializable {
 	private String cpfCnpj;	
 	private Integer tipo;
 	
+	@ElementCollection(fetch=FetchType.EAGER)
+	@CollectionTable(name="PERFIL_CLIENTE")
+	private Set<Perfil> perfis = new HashSet<>();
 	
 	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
 	private List<Endereco> enderecos = new ArrayList<>();
@@ -53,7 +59,8 @@ public class Cliente implements Serializable {
 	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
 	private List<Pedido> pedido = new ArrayList<>();
 	
-	public Cliente() {		
+	public Cliente() {	
+		addPerfil(Perfil.USUARIO);
 	}
 
 	public Cliente(Integer id, String nome, String email, String cpfCnpj, TipoCliente tipo, String senha) {
@@ -137,5 +144,13 @@ public class Cliente implements Serializable {
 	public void setPedido(List<Pedido> pedido) {
 		this.pedido = pedido;
 	}	
+	
+	public Set<Perfil> getPerfis(){
+		return perfis.stream().map(x-> Perfil.toEnum(x.getCod())).collect(Collectors.toSet()); 
+	}
+	
+	public void addPerfil(Perfil perfil) {
+		perfis.add(perfil);
+	}
 
 }
