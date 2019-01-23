@@ -35,13 +35,14 @@ public class ClienteResource {
 		return obj;
 	}
 	
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(value = "/{id}", method=RequestMethod.GET)
 	public ResponseEntity<?> findById(@PathVariable Integer id) {
 		Cliente obj = service.findById(id);
 		return ResponseEntity.ok().body(obj);	
 	}
 	
-	@PreAuthorize("hasAnyHole('ADMIM')")
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(method=RequestMethod.POST)
 	public ResponseEntity<Void> insert(@Valid @RequestBody ClienteNewDTO objDTO){
 		Cliente obj = service.fromDTO(objDTO);
@@ -50,7 +51,7 @@ public class ClienteResource {
 		return ResponseEntity.created(uri).build();
 	}
 	
-	@PreAuthorize("hasAnyHole('ADMIM')")
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(value="/{id}", method=RequestMethod.PUT)
 	public ResponseEntity<Void> update(@Valid @RequestBody ClienteDTO objDTO, @PathVariable Integer id){
 		Cliente obj = service.fromDTO(objDTO);
@@ -59,7 +60,7 @@ public class ClienteResource {
 		return ResponseEntity.noContent().build();
 	}
 	
-	@PreAuthorize("hasAnyHole('ADMIM')")
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)
 	public ResponseEntity<Void> delete(@PathVariable Integer id){	
 		service.delete(id);

@@ -15,11 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.taian.cursospringbootcomionic.domain.Cidade;
 import com.taian.cursospringbootcomionic.domain.Cliente;
 import com.taian.cursospringbootcomionic.domain.Endereco;
+import com.taian.cursospringbootcomionic.domain.enums.Perfil;
 import com.taian.cursospringbootcomionic.domain.enums.TipoCliente;
 import com.taian.cursospringbootcomionic.dto.ClienteDTO;
 import com.taian.cursospringbootcomionic.dto.ClienteNewDTO;
 import com.taian.cursospringbootcomionic.repositories.ClienteRepository;
 import com.taian.cursospringbootcomionic.repositories.EnderecoRepository;
+import com.taian.cursospringbootcomionic.security.UserSS;
+import com.taian.cursospringbootcomionic.services.exception.AuthorizationException;
 import com.taian.cursospringbootcomionic.services.exception.DataIntegrityException;
 import com.taian.cursospringbootcomionic.services.exception.ObjectNotFoundException;
 
@@ -41,6 +44,12 @@ public class ClienteService {
 	}
 
 	public Cliente findById(Integer id) {
+		
+		UserSS userSS = UserService.authenticated();
+		if((userSS == null) || (!userSS.hasRole(Perfil.ADMIN) && !id.equals(userSS.getId()))) {
+			throw new AuthorizationException("Usuário não autorizado");
+		}		
+		
 		Optional<Cliente> obj = repo.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException("Cliente não encontrado! Id = " + id));
 
