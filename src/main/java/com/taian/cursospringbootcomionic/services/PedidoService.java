@@ -5,19 +5,22 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.taian.cursospringbootcomionic.domain.Cliente;
 import com.taian.cursospringbootcomionic.domain.ItemPedido;
 import com.taian.cursospringbootcomionic.domain.PagamentoComBoleto;
 import com.taian.cursospringbootcomionic.domain.Pedido;
-import com.taian.cursospringbootcomionic.domain.Produto;
 import com.taian.cursospringbootcomionic.domain.enums.EstadoPagamento;
-import com.taian.cursospringbootcomionic.repositories.ClienteRepository;
 import com.taian.cursospringbootcomionic.repositories.ItemPedidoRepository;
 import com.taian.cursospringbootcomionic.repositories.PagamentoRepository;
 import com.taian.cursospringbootcomionic.repositories.PedidoRepository;
 import com.taian.cursospringbootcomionic.repositories.ProdutoRepository;
+import com.taian.cursospringbootcomionic.security.UserSS;
+import com.taian.cursospringbootcomionic.services.exception.AuthorizationException;
 import com.taian.cursospringbootcomionic.services.exception.ObjectNotFoundException;
 
 @Service
@@ -81,5 +84,15 @@ public class PedidoService {
 		//emailService.sendOrderConfirmationEmail(obj);
 		emailService.sendOrderConfirmationHtmlEmail(obj);
 		return obj;
+	}
+	
+	public Page<Pedido> findPage(Integer page, Integer linesPerPage, String orderBy, String direction){
+		UserSS user = UserService.authenticated();
+		if(user == null) {
+			throw new AuthorizationException("Acesso negado");
+		} 		
+		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
+		Cliente cliente = clienteService.findById(user.getId());
+		return repo.findByCliente(cliente, pageRequest);
 	}
 }
